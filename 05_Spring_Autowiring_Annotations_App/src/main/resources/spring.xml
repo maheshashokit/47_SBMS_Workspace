@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		https://www.springframework.org/schema/context/spring-context.xsd">
+
+  <bean id ="stu" class="com.ashokit.spring.beans.Student">
+  	<property name="id" value="AIT123"/>
+  	<property name="name" value="Mahesh"/>
+  </bean>
+  
+ 	  <!-- Permanent Address -->
+  <bean id="address1" class="com.ashokit.spring.beans.Address">
+  	<property name="cityName" value="Vijayawada"/>
+  	<property name="pinCode" value="520001"/>
+  </bean>
+  
+    <!-- Temporary Address -->
+  <bean id="address2" class="com.ashokit.spring.beans.Address">
+  	<property name="cityName" value="Hyderabad"/>
+  	<property name="pinCode" value="520225"/>
+  </bean>
+  
+  <bean id="date" class="java.util.Date"/>
+  
+   <!--  Enabling the Autowiring Annotation Feature -->
+  <context:annotation-config/>
+   
+	    
+</beans>

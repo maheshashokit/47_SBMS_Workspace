@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="st" class="com.ashokit.beans.Student" lazy-init="true">
+      <property name="id" value="AIT1232"/>
+      <property name="name" value="ASHOK"/>
+    </bean>
+    
+    <bean id="co" class="com.ashokit.beans.Course">
+      <property name="id" value="CIT123"/>
+      <property name="name" value="Spring"/>
+      <property name="fee" value="5000"/>
+    </bean>
+		
+    
+</beans>

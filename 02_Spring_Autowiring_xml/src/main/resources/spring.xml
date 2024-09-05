@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		https://www.springframework.org/schema/beans/spring-beans.xsd">
+		
+     <bean id="user"  class="com.ashokit.User" autowire="constructor"/>
+     
+     <bean id="address" class="com.ashokit.Address" primary="true">
+       <property name="doorNo" value="1-2-3"/>
+       <property name="streetName" value="ABC"/>
+       <property name="city" value="Hyderabad"/>
+     </bean>
+     
+      <bean id="address1" class="com.ashokit.Address">
+		<property name="doorNo" value="11-21-31" />
+		<property name="streetName" value="ABC1" />
+		<property name="city" value="Hyderabad1" />
+	 </bean>
+     
+     <bean id="role" class="com.ashokit.Role">
+        <property name="roleName" value="HRADMIN"/>
+     </bean>
+     
+     <bean id="test" class="com.ashokit.Test">
+       <constructor-arg value="GoodMorning"/>
+       <!-- <constructor-arg value="Wishes"/> -->
+     </bean>
+</beans>

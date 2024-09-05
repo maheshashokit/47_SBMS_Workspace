@@ -5,12 +5,71 @@
 		https://www.springframework.org/schema/beans/spring-beans.xsd">
 
 		<!--  Configuring the Spring Beans -->	
-	<bean id="demo" class="com.ashokit.beans.Demo"/>
+	<bean id="demo" class="com.ashokit.beans.Demo">
+	    <!-- Informing to spring container about setter method to be used in our Spring Bean class -->
+	   <property name="topicName" value="Welcome To AshokIT"/>
+	</bean>
 	
 	<bean id="test" class="com.ashokit.beans.Test"/>
 	
-	<bean id="welcome" class="com.ashokit.beans.Welcome"/>
+	<bean id="welcome" class="com.ashokit.beans.Welcome">
+			<!--  Informing to Spring Container about Constructor to be used in our Spring Bean Class -->
+		<constructor-arg name="wishMessage" value="Good Morning" index="0"/>
+		<constructor-arg name="courseName"  value="SpringBoot"   index="1"/>
+	</bean>
 	
 	<bean id="display" class="com.ashokit.beans.Display"/>
-
+	
+	<bean id="student" class="com.ashokit.beans.Student">
+	     <!-- simple properties we used value attribute to assign values -->
+		<property name="id" value="AIT123"/>
+		<property name="name" value="Mahesh"/>
+		<property name="discount" value="10"/>
+		
+		<property name="contactNos">
+			<set>
+				<value>1232323232</value>
+				<value>2332334434</value>
+			</set>		
+		</property>
+		<property name="emailIds">
+			<list>
+				<value>mahesh.ashokit@gmail.com</value>
+				<value>ashokitschools@gmail.com</value>
+			</list>
+		</property>
+		<property name="qualifications">
+			<map>
+				<entry key="primarySchool" value="AshokIT"/>
+				<entry key="intermediate" value="AshokIT Schools"/>
+				<entry key="engineering" value="AshokIT Engineering"/>			
+			</map>		
+		</property>
+		<property name="courseNames">
+			<array>
+				<value>Spring</value>
+				<value>SpringBoot</value>
+				<value>Angular</value>
+				<value>React</value>
+			</array>
+		</property>
+		<property name="dbProperties">
+			<props>
+				<prop key="driverClassName">oracle.jdbc.driver.OracleDriver</prop>
+				<prop key="driverUrl">jdbc:oracle:thin:@localhost:1521:xe</prop>
+				<prop key="databaseUserName">system</prop>
+				<prop key="databasePassword">manager</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- Configuration for Object type dependency -->
+	<bean id ="user" class="com.ashokit.beans.User" autowire="no">
+		<constructor-arg name="role" ref="roleObj"/>
+		<constructor-arg name="course" ref="courseObj"/>
+	</bean>
+	
+	<bean id="roleObj" class="com.ashokit.beans.Role"/>
+	
+	<bean id="courseObj" class="com.ashokit.beans.Course"/>
 </beans>

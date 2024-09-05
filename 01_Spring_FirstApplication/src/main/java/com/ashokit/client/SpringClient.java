@@ -27,6 +27,8 @@ public class SpringClient {
 		System.out.println(demoBean1.hashCode());
 		System.out.println(demoBean2.hashCode());
 		
+		System.out.println("Topic Name:::" + demoBean); //internally calls toString() of Demo Class
+		
 		System.out.println("**********************************************");
 
 		Welcome wel  = (Welcome)dfb.getBean("welcome");
@@ -35,6 +37,7 @@ public class SpringClient {
 		System.out.println(wel.hashCode());
 		System.out.println(wel1.hashCode());
 		System.out.println(wel2.hashCode());
+		System.out.println("Wish Message:::" + wel); //internally calls toString() of Demo Class
 		
 		System.out.println("**********************************************");
 
@@ -48,6 +51,20 @@ public class SpringClient {
 		System.out.println("**********************************************");
 		Display disp =(Display)dfb.getBean("display");
 		System.out.println(disp.hashCode());
+		
+		System.out.println("**********************************************");
+		Student std = (Student)dfb.getBean("student");
+		std.displayData();
+		
+		//another form for requesting spring bean
+		Student std1 = dfb.getBean(Student.class);
+		std1.displayData();
+		
+		Student std2 = dfb.getBean(Student.class,"student11111");
+		std2.displayData();
+		
+		//Course course = dfb.getBean(Course.class);
+		//System.out.println(course);
 		
 	}
 }
