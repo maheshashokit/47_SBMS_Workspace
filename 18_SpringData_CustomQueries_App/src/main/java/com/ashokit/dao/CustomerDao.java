@@ -34,7 +34,7 @@ public interface CustomerDao extends CrudRepository<Customer, Serializable> {
 	public List<Customer> getAllCustomersByLocation(String custLocation);
 
 	// IndexedParameters
-	@Query(value = "from Customer c where c.location=?1 and c.billAmount > ?2", nativeQuery = false)
+	@Query(value = "from Customer c where c.location=?1 and c.billAmount >= ?2", nativeQuery = false)
 	public List<Customer> getAllCustomersByLocation(String custLocation, float custbillAmount);
 
 	@Query(value = "update ashokit_customers set location=:custLocation where customer_id=:custId", nativeQuery = true)

@@ -12,5 +12,5 @@ public interface CustomerService {
 	
 	public void fetchCustomerDetailsByCity(String location);
 	
-	public void fetchCustomerDetailsByLocation(String location);
+	public void fetchCustomerDetailsByLocation(String location,float billAmount);
 }

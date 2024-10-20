@@ -53,8 +53,8 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 	
 	@Override
-	public void fetchCustomerDetailsByLocation(String location){
-		List<Customer> allCustomers = customerDao.getAllCustomersByLocation(location);
+	public void fetchCustomerDetailsByLocation(String location,float billAmount){
+		List<Customer> allCustomers = customerDao.getAllCustomersByLocation(location, billAmount);
 		allCustomers.forEach(System.out::println);
 	}
 

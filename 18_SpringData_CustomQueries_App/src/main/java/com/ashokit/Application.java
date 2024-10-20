@@ -45,15 +45,21 @@ public class Application implements CommandLineRunner {
 		
 		System.out.println();
 		System.out.println("6.....Selecting Data Using HQL Query Based on Location with Index.......");
-		customerService.fetchCustomerDetailsByCity("Hyderabad2");
+		customerService.fetchCustomerDetailsByLocation("Hyderabad2",9000f);
 		
 		System.out.println();
-		System.out.println("7.....Updating the Customer Details based on CustomerId using @Query.......");
-		customerDao.updateCustomerLocation("Hyderabad", 1002);
+		System.out.println("7.....Updating Data Using Native SQL Query.......");
+		int updateRowCount = customerDao.updateCustomerLocation("Orissa", 203);
+		if(updateRowCount > 0) {
+			System.out.println(updateRowCount+" CustomerLocation is updated....");
+		}
 		
 		System.out.println();
-		System.out.println("8.....Deleting the Customer Details based on CustomerId using @Query.......");
-		int deleteCount = customerDao.deleteCustomersByLocation("Hyderabad3");
-		System.out.println("Deleted Customers:::::" + deleteCount);
+		System.out.println("8.....Deleting Data Using HQL Query.......");
+		int deletedRowCount = customerDao.deleteCustomersByLocation("Hyderabad4");
+		if(deletedRowCount > 0) {
+			System.out.println(deletedRowCount +" Customer is Deleted....");
+		}
+		
 	}
 }
