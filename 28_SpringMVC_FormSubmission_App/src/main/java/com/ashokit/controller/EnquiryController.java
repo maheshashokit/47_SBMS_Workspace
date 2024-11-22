@@ -12,7 +12,7 @@ import com.ashokit.beans.Enquiry;
 
 @Controller
 public class EnquiryController {
-
+	
 	
 	 //RequestProcessorMethod for returning enquiry page
 	 @RequestMapping(value="/")
