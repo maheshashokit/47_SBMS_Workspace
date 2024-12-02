@@ -13,7 +13,7 @@ import jakarta.transaction.Transactional;
 
 public interface EnquiryDao extends ListCrudRepository<Enquiry, Serializable>,ListPagingAndSortingRepository<Enquiry, Serializable> {
 	
-	@Query(value = "update ashokit_enquires set email_id=:emailId,contact_no=:contactNo where enquiry_id=:enquiryId", nativeQuery = true)
+	@Query(value = "update ashokit_enquires set email=:emailId,contact_no=:contactNo where enquiry_id=:enquiryId", nativeQuery = true)
 	@Modifying
 	@Transactional	
 	public int updateEnquiryDetails(int enquiryId,String emailId,String contactNo);

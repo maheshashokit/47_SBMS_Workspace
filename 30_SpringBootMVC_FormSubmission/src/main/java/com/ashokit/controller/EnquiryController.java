@@ -1,5 +1,9 @@
 package com.ashokit.controller;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,6 +23,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ashokit.beans.EnquiryDTO;
 import com.ashokit.entity.Enquiry;
 import com.ashokit.services.EnquiryService;
+import com.ashokit.services.PDFGenerator;
+import com.lowagie.text.DocumentException;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/enquiry")
@@ -48,18 +56,18 @@ public class EnquiryController {
 		
 		//EnquiryDTO contains form data 
 		 System.out.println("Enquiry ID ::::: "+ enquirydto.getEnquiryId());
+		 // If enquiryId is null indicates creation of enquiry record otherwise updation of enquiry detaails
 		 EnquiryDTO enquiry = null;
 		 if(Objects.isNull(enquirydto.getEnquiryId())) {
 			 //creating the enquiry info
 			 enquiry = enquiryService.createEnquiry(enquirydto);
+			 map.addAttribute("enquiryStatus", "EnquiryInformation Sent out Admin Team!!!!");
 		 }else {
 			 //updating the enquiry Information
 			 enquiryService.updateEnquiry(enquirydto);
-		 }
-		 
-		 if(Objects.nonNull(enquiry)) {
-			 map.addAttribute("enquiryStatus", "EnquiryInformation Sent out Admin Team!!!!");
-		 }
+			 map.addAttribute("enquiryStatus", "EnquiryInformation Has Been Updated!!!!");
+		 }	 
+		
 		 return "redirect:displayEnquires";
 	}
 	
@@ -108,6 +116,25 @@ public class EnquiryController {
 		
 		map.addAttribute("readOnly", true);
 		return "enquiryDetails";		
+	}
+	
+	@GetMapping("/export-to-pdf")
+	public void generatePdfFile(HttpServletResponse response) throws DocumentException, IOException {
+		
+		response.setContentType("application/pdf");
+		
+		DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
+		String currentDateTime = dateFormat.format(new Date());
+		
+		String headerkey = "Content-Disposition";
+		String headervalue = "attachment; filename=ashokit_enquires_" + currentDateTime +".pdf";
+		response.setHeader(headerkey, headervalue);
+		
+		
+		List<EnquiryDTO> listOfEnquires = enquiryService.getAllEnquires();
+		
+		PDFGenerator generator = new PDFGenerator();
+		generator.generate(listOfEnquires, response);
 	}
 
 }

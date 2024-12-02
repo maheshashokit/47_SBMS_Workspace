@@ -77,11 +77,14 @@ public class EnquiryServiceImpl implements EnquiryService {
 			//converting from Enquiry To EnquiryDTO
 			enquiryFinalInfo = modelMapper.map(enquiryInfo, EnquiryDTO.class);
 		}
+		System.out.println("Enquiry Info:::::" + enquiryFinalInfo);
+		System.out.println("Enquiry ID:::::" + enquiryId);
 		return enquiryFinalInfo;
 	}
 	
 	@Override
-	public boolean updateEnquiry(EnquiryDTO enquiryDTO) {		
+	public boolean updateEnquiry(EnquiryDTO enquiryDTO) {
+		
 		int updateEnquiryDetails = enquiryDao.updateEnquiryDetails(enquiryDTO.getEnquiryId(), enquiryDTO.getEmailId(), enquiryDTO.getContactNo());		
 		return updateEnquiryDetails > 0;
 	}

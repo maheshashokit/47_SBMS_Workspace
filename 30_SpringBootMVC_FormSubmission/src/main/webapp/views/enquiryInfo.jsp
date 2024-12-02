@@ -6,13 +6,19 @@
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"/>
 
 </head>
 <body>
  
    <div class="text-danger text-center">
-      ${pageTitle}
+      ${pageTitle} <br/>
+      ${enquiryStatus}
    </div>
+   <div class="container">
+	   <a href="${pageContext.request.contextPath}/enquiry/export-to-pdf" title="Export To Pdf"><i class='bi bi-file-pdf link-danger' style="font-size:2rem;color:red;float:right"></i></a> &nbsp;&nbsp;&nbsp;&nbsp;
+	   <a href="#" title="Export To Excel"><i class='bi bi-file-excel link-danger' style="font-size:2rem;color:red;float:right"></i></a>
+  </div>
    <table class="table table-striped table-responsive-md container mt-5" style="width:60%">   
       <thead>
          <tr>

@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+<div class="text-danger text-center">
+      ${pageTitle} <br/>
+      ${enquiryStatus}
+   </div>
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -17,7 +21,7 @@
                         <h4 class="text-danger bold">AshokIT Enquiry Form</h4>
                     </div>
                     <div class="card-body">
-                        <spring:form action="processEnquiry" modelAttribute="enquiryForm">
+                        <spring:form action="${pageContext.request.contextPath}/enquiry/processEnquiry" modelAttribute="enquiryForm">
                             <div class="form-group">
                                 <label for="Name">Name</label>
                                 <spring:input path="name" cssClass="form-control" readonly="${readOnly}"/>
@@ -42,6 +46,7 @@
 										<spring:option value="Devops">Devops</spring:option>
 								</spring:select>
                             </div>
+                            <spring:hidden path="enquiryId"/>
                             <button type="submit" class="btn btn-danger btn-block">Send Enquiry</button>
                         </spring:form>
                     </div>
