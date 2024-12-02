@@ -1,7 +1,15 @@
 package com.ashokit.services;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ashokit.beans.EnquiryDTO;
@@ -28,5 +36,53 @@ public class EnquiryServiceImpl implements EnquiryService {
 		Enquiry savedEnquiry = enquiryDao.save(enquiry);
 
 		return modelMapper.map(savedEnquiry, EnquiryDTO.class);
+	}
+	
+	@Override
+	public List<EnquiryDTO> getAllEnquires() {
+		
+		//getting all enquires Info from Database
+		List<Enquiry> allEnquires = enquiryDao.findAll();
+		
+		//conversion from entity object into dto object
+		List<EnquiryDTO> allEnquiresInfo = allEnquires.stream().map(eachEnquiryInfo -> modelMapper.map(eachEnquiryInfo, EnquiryDTO.class))
+															   .collect(Collectors.toList());
+		
+		return allEnquiresInfo;
+	}
+	
+	@Override
+	public Page<Enquiry> getAllEnquiresByPages(int pageNo, int pageSize) {
+		Pageable pageEnquiries = PageRequest.of(pageNo-1, pageSize);
+		return enquiryDao.findAll(pageEnquiries);
+	}
+	
+	@Override
+	public Page<Enquiry> getAllEnquiresSortByPage(int pageNo, int pageSize, String sortField, String sortDirection) {
+		
+		Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+			                                                                    Sort.by(sortField).descending();
+		Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+	
+		return this.enquiryDao.findAll(pageable);
+	}
+	
+	@Override
+	public EnquiryDTO getEnquiryDetailsById(int enquiryId) {
+		Optional<Enquiry> enquiryDetails = enquiryDao.findById(enquiryId);
+		EnquiryDTO enquiryFinalInfo = null;
+		if(enquiryDetails.isPresent()) {
+			Enquiry enquiryInfo = enquiryDetails.get();
+			
+			//converting from Enquiry To EnquiryDTO
+			enquiryFinalInfo = modelMapper.map(enquiryInfo, EnquiryDTO.class);
+		}
+		return enquiryFinalInfo;
+	}
+	
+	@Override
+	public boolean updateEnquiry(EnquiryDTO enquiryDTO) {		
+		int updateEnquiryDetails = enquiryDao.updateEnquiryDetails(enquiryDTO.getEnquiryId(), enquiryDTO.getEmailId(), enquiryDTO.getContactNo());		
+		return updateEnquiryDetails > 0;
 	}
 }

@@ -20,7 +20,7 @@
                         <spring:form action="processEnquiry" modelAttribute="enquiryForm">
                             <div class="form-group">
                                 <label for="Name">Name</label>
-                                <spring:input path="name" cssClass="form-control"/>
+                                <spring:input path="name" cssClass="form-control" readonly="${readOnly}"/>
                             </div>
                             <div class="form-group">
                                 <label for="EmailID">EmailID</label>
@@ -32,7 +32,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="Course">Course</label>
-		                        <spring:select path="courseName" cssClass="form-control">
+		                        <spring:select path="courseName" cssClass="form-control" disabled="${readOnly}">
 										<spring:option value=""></spring:option>
 										<spring:option value="Angular">AngularJS</spring:option>
 										<spring:option value="React">ReactJS</spring:option>
