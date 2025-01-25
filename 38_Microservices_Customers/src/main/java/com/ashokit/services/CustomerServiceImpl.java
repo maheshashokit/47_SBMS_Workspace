@@ -40,7 +40,7 @@ public class CustomerServiceImpl implements CustomerService {
 	//@LoadBalanced
 	private RestTemplate restTemplate; 
 	
-	//@Value("${address.service.name.url}")
+	@Value("${address.service.name.url}")
 	public String addressServiceUrl;
 	
 	//@Autowired
@@ -78,10 +78,10 @@ public class CustomerServiceImpl implements CustomerService {
 			CustomerResponse customerResponse = this.convertingEntityFromResponse(custDetails);
 			
 			//calling the AddressService
-			//AddressResponse addressResponse = callingAddressServiceWithRestTemplate(customerId);
+			AddressResponse addressResponse = callingAddressServiceWithRestTemplate(customerId);
 
-			//Appending AddressResponse to CustomerResponse(1st Technique)
-			//customerResponse.setAddressResponse(addressResponse);
+			//Appending AddressResponse to CustomerResponse (First technique)
+			customerResponse.setAddressResponse(addressResponse);
 			
 			return customerResponse;
 		}else {
@@ -97,6 +97,7 @@ public class CustomerServiceImpl implements CustomerService {
 		if (customerDetails.isPresent()) {
 			Customer custDetails = customerDetails.get();
 			
+			//holding customer information in customerResponse
 			CustomerResponse customerResponse = this.convertingEntityFromResponse(custDetails);
 			
 			//calling the AddressService
@@ -213,8 +214,9 @@ public class CustomerServiceImpl implements CustomerService {
 		 return null;
 	}
 	
-	//calling the Address micro service to Fetch Address of particular Customer
+	//calling the Address microservice to Fetch Address of particular Customer
 	private AddressResponse callingAddressServiceWithRestTemplate(int customerId) {
+		//http://localhost:9966/api/address/
 		System.out.println("Address Service URL:::" + addressServiceUrl);
 		ResponseEntity<AddressResponse> addressResponseEntity = 
 				restTemplate.getForEntity(addressServiceUrl+"customer/{customerId}",
@@ -224,7 +226,7 @@ public class CustomerServiceImpl implements CustomerService {
 		
 		//By Using exchange() of RestTemplate
 		/*ResponseEntity<AddressResponse> addressResponseEntity = 
-				restTemplate.exchange(addressServiceUrl+"{customerId}", 
+				restTemplate.exchange(addressServiceUrl+"customer/{customerId}", 
 							  HttpMethod.GET,
 							  null,
 							  AddressResponse.class,

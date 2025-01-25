@@ -14,6 +14,7 @@ public interface CustomerService {
 	
 	public List<CustomerResponse> getAllCustomers();
 	
+	//getting customer along with his address information
 	public ApiResponse getCustomerAndAddressById(Integer customerId);
 	
 

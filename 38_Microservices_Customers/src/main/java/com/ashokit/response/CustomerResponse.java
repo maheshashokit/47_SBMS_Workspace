@@ -34,6 +34,6 @@ public class CustomerResponse {
 	private LocalDateTime updatedDate;	
 	
 	//Supporting the AddressResponse
-	//private AddressResponse addressResponse;
+	private AddressResponse addressResponse;
 
 }

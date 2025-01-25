@@ -28,41 +28,42 @@ public class Application implements CommandLineRunner{
 
 /*
  {
-    "id": 102,
-    "name": "Raghav",
-    "location": "Mumbai",
-    "gender": "Male",
-    "emailId": "Raghav.ashokit@gmail.com",
-    "contactNo": "123456",
-    "createdDate": "2023-10-03T07:07:53.902898",
+    "id": 2,
+    "name": "Ashok",
+    "location": "Hyderabad",
+    "gender": "male",
+    "emailId": "ashokit@gmail.com",
+    "contactNo": "11223344",
+    "createdDate": "2025-01-24T07:19:40.244514",
     "addressResponse": {
-        "id": 102,
-        "doorNo": "11-22-31",
-        "cityName": "Mumbai",
-        "pincode": "11112222",
-        "created_dt": "2023-10-03T06:54:48.791329",
-        "customerId": 5253
+        "id": 54,
+        "doorNo": "123-345-456",
+        "cityName": "Delhi",
+        "pincode": "55555",
+        "created_dt": "2025-01-25T06:42:51.809715",
+        "customerId": 2
     }
+}
 */
 
 /*
 {
-"customerDetails": {
-    "id": 1,
-    "name": "Ramesh",
-    "location": "Hyderabad",
-    "gender": "Male",
-    "emailId": "ramesh.ashokit@gmail.com",
-    "contactNo": "123456",
-    "createdDate": "2023-09-30T07:11:56.55403"
-},
-"addressDetails": {
-    "id": 1,
-    "doorNo": "1-2-3",
-    "cityName": "Hyderabad",
-    "pincode": "123456",
-    "created_dt": "2023-10-03T06:40:47.917831",
-    "customerId": 1
-}
+    "customerDetails": {
+        "id": 2,
+        "name": "Ashok",
+        "location": "Hyderabad",
+        "gender": "male",
+        "emailId": "ashokit@gmail.com",
+        "contactNo": "11223344",
+        "createdDate": "2025-01-24T07:19:40.244514"
+    },
+    "addressDetails": {
+        "id": 54,
+        "doorNo": "123-345-456",
+        "cityName": "Delhi",
+        "pincode": "55555",
+        "created_dt": "2025-01-25T06:42:51.809715",
+        "customerId": 2
+    }
 }
 */

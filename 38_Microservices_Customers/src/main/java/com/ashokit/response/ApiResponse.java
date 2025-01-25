@@ -17,10 +17,10 @@ public class ApiResponse {
 	
 	private AddressResponse addressDetails;
 	
-	private String errorMessage;
+	/*private String errorMessage;
 	
 	public ApiResponse(String errorMessage) {
 		this.errorMessage = errorMessage;
-	}
+	}*/
 	
 }

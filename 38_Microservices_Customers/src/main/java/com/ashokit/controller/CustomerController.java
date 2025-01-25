@@ -52,9 +52,11 @@ public class CustomerController {
 	//@CircuitBreaker(name = "Address-Service",fallbackMethod = "errorHandlingMethod")
 	//@Retry(name="Address-Service",fallbackMethod = "errorHandlingMethod")
 	public ResponseEntity<?> fetchCustomerDetailsById(@PathVariable("customerId") Integer customerId){
-		CustomerResponse customerDetails = customerService.getCustomerById(customerId);
+		//FirstTechnique -> Not Readable
+		//CustomerResponse customerDetails = customerService.getCustomerById(customerId);
 		System.out.println("Retry Count:::" + retryCount + " Date  is :::" + LocalDateTime.now());
-		//ApiResponse customerDetails = customerService.getCustomerAndAddressById(customerId);
+		//Second Technique -> More Readable
+		ApiResponse customerDetails = customerService.getCustomerAndAddressById(customerId);
 		return ResponseEntity.ok(customerDetails);
 	}
 	
@@ -66,7 +68,7 @@ public class CustomerController {
 		return new ResponseEntity<>(newCustomerDetails, HttpStatus.CREATED);
 	}
 		
-	public ResponseEntity<?> errorHandlingMethod(@PathVariable("customerId") Integer customerId,Throwable throwable) {
+	/*public ResponseEntity<?> errorHandlingMethod(@PathVariable("customerId") Integer customerId,Throwable throwable) {
 	    return new ResponseEntity<ApiResponse>(new ApiResponse("OOPS Something went Wrong.Address-Service is Down..."),HttpStatus.OK);
-	}
+	}*/
 }
