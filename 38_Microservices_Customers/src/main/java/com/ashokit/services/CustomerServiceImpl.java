@@ -1,5 +1,6 @@
 package com.ashokit.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -7,20 +8,23 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.ashokit.dao.CustomerDao;
 import com.ashokit.entity.Customer;
 import com.ashokit.feign.clients.AddressClient;
 import com.ashokit.request.CustomerRequest;
 import com.ashokit.response.AddressResponse;
+import com.ashokit.response.AddressResponseList;
 import com.ashokit.response.ApiResponse;
 import com.ashokit.response.CustomerResponse;
 
@@ -43,15 +47,15 @@ public class CustomerServiceImpl implements CustomerService {
 	@Value("${address.service.name.url}")
 	public String addressServiceUrl;
 	
-	//@Autowired
-	//public WebClient webClient;
+	@Autowired
+	public WebClient webClient;
 	
-	//Autowiring the Feignclients
-	//@Autowired
-	//public AddressClient addressClient;
+	//Autowiring the FeignClient
+	@Autowired
+	public AddressClient addressClient;
 	
-	//@Autowired
-	//private DiscoveryClient discoveryClient;
+	@Autowired
+	private DiscoveryClient discoveryClient;
 	
 	//@Autowired
 	//private LoadBalancerClient loadBalancerClient;
@@ -101,10 +105,10 @@ public class CustomerServiceImpl implements CustomerService {
 			CustomerResponse customerResponse = this.convertingEntityFromResponse(custDetails);
 			
 			//calling the AddressService
-			AddressResponse addressResponse = callingAddressServiceWithRestTemplate(customerId);
+			//AddressResponse addressResponse = callingAddressServiceWithRestTemplate(customerId);
 			//AddressResponse addressResponse = callingAddressServiceWithWebClient(customerId);
 			//AddressResponse addressResponse = addressClient.fetchAddressByCustomerId(customerId).getBody();
-			//AddressResponse addressResponse = callAddressServiceByUsingDiscoveryClient(customerId);
+			AddressResponse addressResponse = callAddressServiceByUsingDiscoveryClient(customerId);
 			//AddressResponse addressResponse = callAddressServiceByUsingLoadBalancer(customerId);
 
 			//Appending CustomerResponse & AddressResponse to ApiResponse(2nd Technique)
@@ -122,23 +126,34 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public List<CustomerResponse> getAllCustomers() {
+	
 		//Getting All Customers Details
 		List<Customer> allCustomers = this.customerDao.findAll();
-		//converting from List<Customer> into List<CustomerResponse>
+		
+		//converting from List<Customer> into List<CustomerResponse> Using Java8 streams
 		List<CustomerResponse> allCustomerResponse = 
 				allCustomers.stream()
-				            .map(eachCustomer -> {return this.modelMapper.map(eachCustomer, CustomerResponse.class);})
+				            .map(eachCustomer -> {return convertingEntityFromResponse(eachCustomer);})
 							.collect(Collectors.toList());
-		log.info("Inside the CustomerServices Record Count {}::::", allCustomers.size());
-		//Writing logic for Address Microservices to get All Address and map to each customer
-		//List<AddressResponse> allAddressResponse = callingAddressServiceForAllAddressWithRestTemplate();
-		//List<AddressResponse> allAddressResponse = callingAddressServiceForAllAddressWithWebClient();
-		//List<AddressResponse> allAddressResponse = addressClient.fetchAllAddresses().getBody();
+		
+		//Writing logic for Address MicroServices to get All Address and map to each customer
+		//AddressResponseList allAddressResponse = callingAddressServiceForAllAddressWithRestTemplate();
+		//AddressResponseList allAddressResponse = callingAddressServiceForAllAddressWithWebClient();
+		AddressResponseList allAddressResponse = addressClient.fetchAllAddresses().getBody();
 		
 		//Mapping the Address with Customer
-		/*List<CustomerResponse> allCustomerResponse1 = allCustomerResponse.stream()
+		List<CustomerResponse> customerAddressResponse = new ArrayList<>();
+		for(CustomerResponse customerResponse: allCustomerResponse) {
+			for(AddressResponse addressResponse1 : allAddressResponse.getAddressResponseList()) {
+				if(customerResponse.getId() == addressResponse1.getCustomerId()) {
+					customerResponse.setAddressResponse(addressResponse1);
+					customerAddressResponse.add(customerResponse);
+				}
+			}			
+		}
+		/*List<CustomerResponse> customerAddressResponse = allCustomerResponse.stream()
 			.map(eachCustomer -> {
-				 Optional<AddressResponse> add = allAddressResponse.stream()
+				 Optional<AddressResponse> add = allAddressResponse.getAddressResponseList().stream()
 				.filter(eachAddress ->{
 						return eachAddress.getCustomerId() == eachCustomer.getId();
 					  })
@@ -151,10 +166,8 @@ public class CustomerServiceImpl implements CustomerService {
 				 }
 				return eachCustomer;
 			 })
-		.collect(Collectors.toList());
-		log.info("After Mapping Customer Into Address::::{}", allCustomerResponse1.size());
-		returning CustomerResponse*/
-		return allCustomerResponse;
+		.collect(Collectors.toList());*/
+		return customerAddressResponse;
 	}
 	
 	//utility method for converting customerRequest to Entity Object
@@ -171,7 +184,7 @@ public class CustomerServiceImpl implements CustomerService {
 		return custResponse;
 	}
 	
-	/*private AddressResponse callAddressServiceByUsingDiscoveryClient(int customerId) {
+	private AddressResponse callAddressServiceByUsingDiscoveryClient(int customerId) {
 		//Fetching all Instances related to Address-Service
 		List<ServiceInstance> allInstances = discoveryClient.getInstances("ADDRESS-SERVICE");
 		
@@ -195,7 +208,7 @@ public class CustomerServiceImpl implements CustomerService {
 				}
 		  }
 		 return null;
-	}*/
+	}
 	
 	private AddressResponse callAddressServiceByUsingLoadBalancer(int customerId) {
 		
@@ -243,24 +256,24 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 	
 	//calling the Address micro service to Fetch Address of particular Customer
-	/*private AddressResponse callingAddressServiceWithWebClient(int customerId) {
+	private AddressResponse callingAddressServiceWithWebClient(int customerId) {
 		AddressResponse addressResponse = webClient.get()
 											        .uri(addressServiceUrl+"customer/"+customerId)
 											        .retrieve()
 											        .bodyToMono(AddressResponse.class)
 											        .block();
 		return addressResponse;
-	}*/		
+	}
 	
 	
 	//calling the Address micro service to Fetch Address of particular Customer
-	private List<AddressResponse> callingAddressServiceForAllAddressWithRestTemplate() {
+	private AddressResponseList callingAddressServiceForAllAddressWithRestTemplate() {
 		
-		ResponseEntity<List<AddressResponse>> addressResponseEntity = 
+		ResponseEntity<AddressResponseList> addressResponseEntity = 
 				    restTemplate.exchange(addressServiceUrl,
 					HttpMethod.GET,
 					null,
-					new ParameterizedTypeReference<List<AddressResponse>>(){});
+					AddressResponseList.class);
 		
 		//checking the API Status
 		if(addressResponseEntity.getStatusCode() == HttpStatus.OK) {
@@ -273,14 +286,15 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 	
 	//calling the Address micro service to Fetch Address of particular Customer
-	/*private List<AddressResponse> callingAddressServiceForAllAddressWithWebClient() {
-		List<AddressResponse> allAddress = webClient.get()
-				.accept(MediaType.APPLICATION_JSON)
-				.retrieve()
-				.bodyToMono(new ParameterizedTypeReference<List<AddressResponse>>(){})
-				.block();
+	private AddressResponseList callingAddressServiceForAllAddressWithWebClient() {
+		AddressResponseList allAddress = webClient.get()
+												  .uri(addressServiceUrl)
+												  .accept(MediaType.APPLICATION_JSON)
+												  .retrieve()
+												  .bodyToMono(AddressResponseList.class)
+												  .block();
 				
 	    return allAddress;
-	}*/
+	}
 
 }
