@@ -1,4 +1,4 @@
-/*package com.ashokit.feign.clients;
+package com.ashokit.feign.clients;
 
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.loadbalancer.core.RandomLoadBalancer;
@@ -8,6 +8,7 @@ import org.springframework.cloud.loadbalancer.support.LoadBalancerClientFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 
+//This class is used to config the RandomLoadBalancer
 public class CustomLoadBalancerConfig {
 
 	@Bean
@@ -17,4 +18,4 @@ public class CustomLoadBalancerConfig {
 		return new RandomLoadBalancer(
 				loadBalancerClientFactory.getLazyProvider(name, ServiceInstanceListSupplier.class), name);
 	}
-}*/
+}

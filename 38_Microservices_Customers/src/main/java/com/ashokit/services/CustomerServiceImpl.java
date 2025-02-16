@@ -107,9 +107,9 @@ public class CustomerServiceImpl implements CustomerService {
 			//calling the AddressService
 			//AddressResponse addressResponse = callingAddressServiceWithRestTemplate(customerId);
 			//AddressResponse addressResponse = callingAddressServiceWithWebClient(customerId);
-			//AddressResponse addressResponse = addressClient.fetchAddressByCustomerId(customerId).getBody();
-			AddressResponse addressResponse = callAddressServiceByUsingDiscoveryClient(customerId);
-			//AddressResponse addressResponse = callAddressServiceByUsingLoadBalancer(customerId);
+			AddressResponse addressResponse = addressClient.fetchAddressByCustomerId(customerId).getBody();
+			//AddressResponse addressResponse = callAddressServiceByUsingDiscoveryClient(customerId);
+			//AddressResponse addressResponse   = callAddressServiceByUsingLoadBalancer(customerId);
 
 			//Appending CustomerResponse & AddressResponse to ApiResponse(2nd Technique)
 			ApiResponse apiResponse = new ApiResponse();
@@ -214,7 +214,8 @@ public class CustomerServiceImpl implements CustomerService {
 		
 	ResponseEntity<AddressResponse> addressEntity = 
 				   restTemplate.exchange(addressServiceUrl+"customer/"+customerId, 
-						         HttpMethod.GET,null,
+						         HttpMethod.GET,
+						         null,
 						         AddressResponse.class,
 						         customerId);   
 		   //checking the API Status is 200 or not

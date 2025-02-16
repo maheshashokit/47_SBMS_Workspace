@@ -4,18 +4,20 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import brave.sampler.Sampler;
+
 @Configuration
 public class ApplicationConfig {
 
 	@Bean
-	public ModelMapper getModelMapper() {
+	ModelMapper getModelMapper() {
 		ModelMapper mapper = new ModelMapper();
 		return mapper;
 	}
 
-	/*@Bean
-	public Sampler alwaysSampler() {
+	@Bean
+	Sampler alwaysSampler() {
 		return Sampler.ALWAYS_SAMPLE;
-	}*/
+	}
 
 }

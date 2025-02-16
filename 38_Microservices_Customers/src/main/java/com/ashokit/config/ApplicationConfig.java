@@ -2,24 +2,27 @@ package com.ashokit.config;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import brave.sampler.Sampler;
+
 @Configuration
 public class ApplicationConfig {
-	
-	@Bean
-	public ModelMapper getModelMapper() {
+
+    @Bean
+    ModelMapper getModelMapper() {
 		ModelMapper mapper = new ModelMapper();
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 		return mapper;
 	}
-	
-	@Bean
-	//@LoadBalanced
-	public RestTemplate getRestTemplateObject() {
+
+    @Bean
+    @LoadBalanced
+    RestTemplate getRestTemplateObject() {
 		return new RestTemplate();
 	}
 	
@@ -28,11 +31,12 @@ public class ApplicationConfig {
         return builder.build();
     }
     
-    /* @Bean
-  	public Sampler alwaysSampler() {
+    @Bean
+  	Sampler alwaysSampler() {
   		return Sampler.ALWAYS_SAMPLE;
   	}  
-  	@Bean
+    
+  	/*@Bean
     //@LoadBalanced
     WebClient.Builder builder() {
         return WebClient.builder();
